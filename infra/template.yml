@@ -1,0 +1,153 @@
+Parameters:
+  HostedZoneName:
+    Type: String
+    Default: "openbrighton.org"
+    Description: hosted zone name
+
+  DomainName:
+    Type: String
+    Default: "openbrighton.org"
+    Description: domain name (subdomains included)
+
+  ProjectName:
+    Type: String
+    Default: "openbrighton"
+    Description: used for naming the re-write lambda at edge function
+
+  SsmNamespace:
+    Type: String
+    Default: "/openbrighton/main/web"
+    Description: namespace for SSM parameters
+
+Resources:
+  Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Ref DomainName
+
+  BucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref Bucket
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Sid: AddPerm
+            Effect: Allow
+            Principal:
+              AWS: !Sub arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity ${OriginAccessIdentity}
+            Action: s3:GetObject
+            Resource: !Sub arn:aws:s3:::${DomainName}/*
+
+  OriginAccessIdentity:
+    Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
+    Properties:
+      CloudFrontOriginAccessIdentityConfig:
+        Comment: !Ref DomainName
+
+  CloudFrontRewriteFunction:
+    Type: AWS::CloudFront::Function
+    Properties:
+      Name: !Sub "${ProjectName}-rewrite-function"
+      AutoPublish: true
+      FunctionConfig:
+        Comment: "Rewrite clean URLs to include index.html"
+        Runtime: cloudfront-js-1.0
+      FunctionCode: |
+        function handler(event) {
+          var request = event.request;
+          var uri = request.uri;
+
+          // Skip rewriting for static file requests (i.e. those with dots in the URI)
+          if (uri.includes('.')) {
+            return request;
+          }
+
+          // Rewrite to /index.html directly
+          if (!uri.endsWith('/')) {
+            request.uri += '/';
+          }
+
+          request.uri += 'index.html';
+          return request;
+        }
+
+  Distribution:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Origins:
+          - DomainName: !GetAtt Bucket.RegionalDomainName
+            Id: S3Origin
+            S3OriginConfig:
+              OriginAccessIdentity: !Sub origin-access-identity/cloudfront/${OriginAccessIdentity}
+        Enabled: "true"
+        Comment: !Ref DomainName
+        DefaultRootObject: index.html
+        Aliases:
+          - !Ref DomainName
+        DefaultCacheBehavior:
+          AllowedMethods:
+            - GET
+            - HEAD
+          Compress: "true"
+          TargetOriginId: S3Origin
+          ForwardedValues:
+            QueryString: "true"
+            Cookies:
+              Forward: none
+          CachePolicyId: 658327ea-f89d-4fab-a63d-7e88639e58f6  # CachingOptimized
+          ViewerProtocolPolicy: redirect-to-https
+          FunctionAssociations:
+            - EventType: viewer-request
+              FunctionARN: !GetAtt CloudFrontRewriteFunction.FunctionARN
+        PriceClass: PriceClass_200
+        ViewerCertificate:
+          AcmCertificateArn: !Ref SslCert
+          SslSupportMethod: sni-only
+        CustomErrorResponses:
+          - ErrorCachingMinTTL: 300
+            ErrorCode: 403
+            ResponseCode: 200
+            ResponsePagePath: /index.html
+          - ErrorCachingMinTTL: 300
+            ErrorCode: 404
+
+  SslCert:
+    Type: AWS::CertificateManager::Certificate
+    Properties:
+      ValidationMethod: DNS
+      DomainName:
+        Ref: DomainName
+
+  DNSRecord:
+    Type: AWS::Route53::RecordSetGroup
+    Properties:
+      HostedZoneName:
+        Fn::Sub: "${HostedZoneName}."
+      RecordSets:
+        - Name:
+            Ref: DomainName
+          Type: A
+          AliasTarget:
+            HostedZoneId: Z2FDTNDATAQYW2
+            DNSName:
+              Fn::GetAtt:
+                - Distribution
+                - DomainName
+
+  DistributionIdParameter:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: !Sub "${SsmNamespace}/distribution/id"
+      Type: String
+      Value: !Ref Distribution
+
+  # SSM Param for the source bucket name
+  # SSM Parameter of the disribution id
+  SourceBucketNameParameter:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: !Sub "${SsmNamespace}/source-bucket/name"
+      Type: String
+      Value: !Ref Bucket
