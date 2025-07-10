@@ -3,8 +3,19 @@
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import FeatureFlags from "../FeatureFlags";
 
 export default function IdeasPage() {
+  if (!FeatureFlags.ideas) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-xl font-bold">
+          Idea submission is currently disabled.
+        </div>
+      </div>
+    );
+  }
+
   const schema = z.object({
     title: z.string().min(1, "Title is required"),
     description: z.string().min(1, "Description is required"),

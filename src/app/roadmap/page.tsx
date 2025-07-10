@@ -1,6 +1,15 @@
 "use client";
 
+import FeatureFlags from "../FeatureFlags";
+
 export default function RoadmapPage() {
+  if (!FeatureFlags.roadmap) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-xl font-bold">Roadmap is currently disabled.</div>
+      </div>
+    );
+  }
   return (
     <div className="min-h-screen flex items-center justify-center">
       <div className="w-full max-w-md p-8 rounded shadow-lg flex flex-col items-center">

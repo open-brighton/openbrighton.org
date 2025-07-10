@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { MdHome, MdMail, MdLightbulb } from "react-icons/md";
 import { FaGithub, FaMap, FaComments } from "react-icons/fa";
+import FeatureFlags from "./FeatureFlags";
 
 export default function Navigation() {
   const [open, setOpen] = useState(false);
@@ -57,42 +58,50 @@ export default function Navigation() {
             <MdHome className="inline-block text-lg" /> Home
           </Link>
         </li>
-        <li>
-          <Link
-            href="/contact"
-            className="hover:underline flex items-center gap-2"
-            onClick={() => setOpen(false)}
-          >
-            <MdMail className="inline-block text-lg" /> Contact
-          </Link>
-        </li>
-        <li>
-          <Link
-            href="/ideas"
-            className="hover:underline flex items-center gap-2"
-            onClick={() => setOpen(false)}
-          >
-            <MdLightbulb className="inline-block text-lg" /> Submit an Idea
-          </Link>
-        </li>
-        <li>
-          <Link
-            href="/roadmap"
-            className="hover:underline flex items-center gap-2"
-            onClick={() => setOpen(false)}
-          >
-            <FaMap className="inline-block text-lg" /> Roadmap
-          </Link>
-        </li>
-        <li>
-          <Link
-            href="/chat"
-            className="hover:underline flex items-center gap-2"
-            onClick={() => setOpen(false)}
-          >
-            <FaComments className="inline-block text-lg" /> Chat
-          </Link>
-        </li>
+        {FeatureFlags.contact && (
+          <li>
+            <Link
+              href="/contact"
+              className="hover:underline flex items-center gap-2"
+              onClick={() => setOpen(false)}
+            >
+              <MdMail className="inline-block text-lg" /> Contact
+            </Link>
+          </li>
+        )}
+        {FeatureFlags.ideas && (
+          <li>
+            <Link
+              href="/ideas"
+              className="hover:underline flex items-center gap-2"
+              onClick={() => setOpen(false)}
+            >
+              <MdLightbulb className="inline-block text-lg" /> Submit an Idea
+            </Link>
+          </li>
+        )}
+        {FeatureFlags.roadmap && (
+          <li>
+            <Link
+              href="/roadmap"
+              className="hover:underline flex items-center gap-2"
+              onClick={() => setOpen(false)}
+            >
+              <FaMap className="inline-block text-lg" /> Roadmap
+            </Link>
+          </li>
+        )}
+        {FeatureFlags.chat && (
+          <li>
+            <Link
+              href="/chat"
+              className="hover:underline flex items-center gap-2"
+              onClick={() => setOpen(false)}
+            >
+              <FaComments className="inline-block text-lg" /> Chat
+            </Link>
+          </li>
+        )}
         <li>
           <Link
             href="https://github.com/open-brighton"
