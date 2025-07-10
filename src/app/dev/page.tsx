@@ -1,5 +1,5 @@
 import FeatureFlags from "../FeatureFlags";
-import config from "../config.js";
+import config from "../config";
 
 export default function DevPage() {
   if (!FeatureFlags.dev) {
