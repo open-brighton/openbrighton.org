@@ -6,14 +6,6 @@ import { FaArrowRight } from "react-icons/fa";
 import FeatureFlags from "../FeatureFlags";
 
 export default function ChatPage() {
-  if (!FeatureFlags.chat) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-xl font-bold">Chat is currently disabled.</div>
-      </div>
-    );
-  }
-
   const [messages, setMessages] = useState([
     { sender: "user", text: "Hi there!" },
     { sender: "bot", text: "Hello! How can I help you today?" },
@@ -74,6 +66,14 @@ export default function ChatPage() {
     },
     [reset]
   );
+
+  if (!FeatureFlags.chat) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-xl font-bold">Chat is currently disabled.</div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-[var(--background)]">

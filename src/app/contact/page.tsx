@@ -7,14 +7,6 @@ import FeatureFlags from "../FeatureFlags";
 import { gql, useMutation } from "@apollo/client";
 
 export default function ContactPage() {
-  if (!FeatureFlags.contact) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-xl font-bold">Contact is currently disabled.</div>
-      </div>
-    );
-  }
-
   const schema = z.object({
     name: z.string().min(1, "Name is required"),
     email: z
@@ -58,7 +50,13 @@ export default function ContactPage() {
       })
       .catch(() => {});
   }
-
+  if (!FeatureFlags.contact) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-xl font-bold">Contact is currently disabled.</div>
+      </div>
+    );
+  }
   return (
     <div className="min-h-screen flex items-center justify-center">
       <div className="w-full max-w-md p-8 bg-[var(--background)] rounded shadow-lg flex flex-col items-center">

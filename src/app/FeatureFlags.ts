@@ -1,4 +1,4 @@
-import settings from "./config.js";
+import { NODE_ENV } from "./config";
 
 export type Feature = 'chat' | 'roadmap' | 'ideas' | 'contact' | 'dev';
 export type FeatureFlagConfig = Record<Feature, boolean>;
@@ -20,7 +20,7 @@ const productionFeatureFlags: FeatureFlagConfig = {
 };
 
 const FeatureFlags =
-  settings.NODE_ENV === "production"
+  NODE_ENV === "production"
     ? productionFeatureFlags
     : localFeatureFlags;
 
