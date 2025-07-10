@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import FeatureFlags from "../FeatureFlags";
+import { gql, useMutation } from "@apollo/client";
 
 export default function ContactPage() {
   if (!FeatureFlags.contact) {
@@ -35,10 +36,27 @@ export default function ContactPage() {
     mode: "onChange",
   });
 
+  const SUBMIT_CONTACT = gql`
+    mutation SubmitContact($input: SubmitContactInput!) {
+      submitContact(input: $input)
+    }
+  `;
+  const [submitContact, { data, error, loading }] = useMutation(SUBMIT_CONTACT);
+
   function onSubmit(data: FormData) {
-    console.log(data);
-    // TODO: Handle form submission logic here
-    reset();
+    submitContact({
+      variables: {
+        input: {
+          email: data.email,
+          name: data.name,
+          message: data.message,
+        },
+      },
+    })
+      .then(() => {
+        reset();
+      })
+      .catch(() => {});
   }
 
   return (
@@ -83,10 +101,14 @@ export default function ContactPage() {
                 ? "bg-[var(--foreground)] text-[var(--background)] hover:bg-[var(--foreground)]/90"
                 : "bg-gray-400 text-gray-700 cursor-not-allowed opacity-60"
             }`}
-            disabled={!isValid}
+            disabled={!isValid || loading}
           >
-            Send
+            {loading ? "Sending..." : "Send"}
           </button>
+          {data && <div className="text-green-600 mt-2">Message sent!</div>}
+          {error && (
+            <div className="text-red-600 mt-2">Error sending message.</div>
+          )}
         </form>
       </div>
     </div>

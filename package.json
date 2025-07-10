@@ -11,7 +11,9 @@
     "init:hard": "rm -rf node_modules && rm -rf package-lock.json && npm install"
   },
   "dependencies": {
+    "@apollo/client": "^3.13.8",
     "@hookform/resolvers": "^5.1.1",
+    "graphql": "^16.11.0",
     "next": "15.3.5",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
