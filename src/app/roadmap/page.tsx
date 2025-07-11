@@ -16,14 +16,13 @@ export default function RoadmapPage() {
         <h1 className="text-3xl font-bold mb-4">🚧 2025 Roadmap</h1>
         <ul className="space-y-4 w-full">
           <li>
-            <span className="font-bold">🚀 Web Infrastructure</span>
+            <span className="font-bold">🚀 Infrastructure</span>
             <ul className="ml-4 mt-1 list-disc text-base">
               <li>✅ Domain registration</li>
               <li>✅ Initial landing page</li>
-              <li>⏳ Add contact & idea submission forms</li>
-              <li>⏳ API Gateawy setup</li>
-              <li>➡️ GraphQL API</li>
-              <li>➡️ Automated data retrieval / data scraping</li>
+              <li>✅ SES Configuration / Email setup</li>
+              <li>✅ API Gateawy</li>
+              <li>✅ GraphQL Service</li>
             </ul>
           </li>
           <li>
@@ -43,6 +42,14 @@ export default function RoadmapPage() {
               <li>✅ Draft vision statement</li>
               <li>⏳ Register as a non-profit</li>
               <li>➡️ Establish review process</li>
+            </ul>
+          </li>
+          <li>
+            <span className="font-bold">Initial Features</span>
+            <ul className="ml-4 mt-1 list-disc text-base">
+              <li>⏳ Mapbox Integration</li>
+              <li>➡️ AI Chatbot UX & GPT Integration</li>
+              <li>➡️ Automated data retrieval / data scraping</li>
             </ul>
           </li>
         </ul>
