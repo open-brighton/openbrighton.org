@@ -17,6 +17,9 @@ export default function Navigation() {
         aria-label={open ? "Close menu" : "Open menu"}
         onClick={() => setOpen((prev) => !prev)}
       >
+        {/* Background Circle */}
+        <span className="absolute w-14 h-14 rounded-full bg-[var(--background)] shadow-lg -z-10" />
+        {/* Hamburger/X Icon */}
         <span
           className={`absolute w-8 h-0.5 bg-current transition-all duration-300 ease-in-out
             ${
