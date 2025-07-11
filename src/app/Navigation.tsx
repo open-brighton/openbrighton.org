@@ -91,6 +91,17 @@ export default function Navigation() {
             </Link>
           </li>
         )}
+        {FeatureFlags.map && (
+          <li>
+            <Link
+              href="/map"
+              className="hover:underline flex items-center gap-2"
+              onClick={() => setOpen(false)}
+            >
+              <FaMap className="inline-block text-lg" /> Map
+            </Link>
+          </li>
+        )}
         {FeatureFlags.chat && (
           <li>
             <Link

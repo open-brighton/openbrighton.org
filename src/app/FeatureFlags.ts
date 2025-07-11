@@ -1,22 +1,24 @@
 import { NODE_ENV } from "./config";
 
-export type Feature = 'chat' | 'roadmap' | 'ideas' | 'contact' | 'dev';
+export type Feature = 'chat' | 'roadmap' | 'ideas' | 'contact' | 'dev' | 'map';
 export type FeatureFlagConfig = Record<Feature, boolean>;
 
 const localFeatureFlags: FeatureFlagConfig = {
-  chat: true, // Enable chat in local
+  chat: true,
   roadmap: true,
   ideas: true,
   contact: true,
-  dev: true, // Enable dev route in local
+  dev: true,
+  map: true,
 };
 
 const productionFeatureFlags: FeatureFlagConfig = {
-  chat: false, // Disable chat in production
+  chat: false,
   roadmap: true,
   ideas: false,
   contact: true,
-  dev: false, // Disable dev route in production
+  dev: false,
+  map: true, 
 };
 
 const FeatureFlags =
