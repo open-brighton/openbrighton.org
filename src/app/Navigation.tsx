@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { MdHome, MdMail, MdLightbulb } from "react-icons/md";
-import { FaGithub, FaMap, FaComments } from "react-icons/fa";
+import { MdHome } from "react-icons/md";
+import { FaGithub, FaMap } from "react-icons/fa";
 import FeatureFlags from "./FeatureFlags";
 
 export default function Navigation() {
