@@ -1,6 +1,6 @@
 "use client";
 import FeatureFlags from "../FeatureFlags";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MAPS } from "./mapConfigs";
 import MapSelector from "./MapSelector";
 import MapDisplay from "./MapDisplay";
@@ -17,6 +17,15 @@ export default function MapPageContent({ initialMapId }: MapPageContentProps) {
   const params = useParams();
   const mapId = params?.mapId as string | undefined;
   const selectedMapId = mapId || initialMapId;
+  const [chevronAnimate, setChevronAnimate] = useState(true);
+
+  useEffect(() => {
+    if (!sidebarOpen) {
+      setChevronAnimate(true);
+      const timeout = setTimeout(() => setChevronAnimate(false), 5000);
+      return () => clearTimeout(timeout);
+    }
+  }, [sidebarOpen]);
 
   if (!FeatureFlags.map) {
     notFound();
@@ -79,16 +88,18 @@ export default function MapPageContent({ initialMapId }: MapPageContentProps) {
         </>
       )}
       {/* Mobile: Floating open tray button */}
-      {/* <button
-        className="md:hidden fixed bottom-4 left-4 z-50 flex items-center px-4 py-2 rounded-full bg-[var(--background)] text-[var(--foreground)] shadow-lg border border-[var(--foreground)]/10 font-semibold"
+      <button
+        className={`md:hidden fixed bottom-4 left-1/2 -translate-x-1/2 z-50 flex items-center justify-center w-10 h-10 rounded-full bg-[var(--background)] text-[var(--foreground)] shadow-lg border border-[var(--foreground)]/10 font-semibold ${
+          sidebarOpen ? "hidden" : ""
+        }`}
         style={{ willChange: "transform" }}
         onClick={() => setSidebarOpen(true)}
         aria-label="Show info tray"
         type="button"
-        hidden={sidebarOpen}
       >
+        {/* Animated up chevron icon */}
         <svg
-          className="w-5 h-5 mr-2"
+          className={`w-6 h-6${chevronAnimate ? " animate-bounce-up" : ""}`}
           fill="none"
           stroke="currentColor"
           strokeWidth="2"
@@ -97,11 +108,10 @@ export default function MapPageContent({ initialMapId }: MapPageContentProps) {
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
-            d="M13 16h-1v-4h-1m1-4h.01"
+            d="M9 12l3-3 3 3"
           />
         </svg>
-        Info
-      </button> */}
+      </button>
       {/* Floating toggle button and map selector (desktop/tablet) */}
       <div className="flex fixed top-4 left-4 z-40 flex-row items-start gap-2">
         <button
