@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useRouter, usePathname } from "next/navigation";
 
 interface MapMeta {
   id: string;
@@ -7,18 +8,27 @@ interface MapMeta {
 interface MapSelectorProps {
   maps: MapMeta[];
   selectedMapId: string;
-  onSelect: (id: string) => void;
   sidebarOpen: boolean;
 }
 
 const MapSelector: React.FC<MapSelectorProps> = ({
   maps,
   selectedMapId,
-  onSelect,
   sidebarOpen,
 }) => {
   const [open, setOpen] = useState(false);
+  const router = useRouter();
+  const pathname = usePathname();
   const selectedMap = maps.find((m: MapMeta) => m.id === selectedMapId);
+
+  const handleSelect = (id: string) => {
+    if (pathname.startsWith("/map/")) {
+      router.replace(`/map/${id}`);
+    } else {
+      router.push(`/map/${id}`);
+    }
+    setOpen(false);
+  };
 
   return (
     <div
@@ -28,7 +38,7 @@ const MapSelector: React.FC<MapSelectorProps> = ({
       style={{ willChange: "transform" }}
     >
       <button
-        className="flex items-center gap-2 px-4 h-10 rounded bg-[var(--background)] text-[var(--foreground)] shadow-lg border border-[var(--foreground)]/10 font-semibold"
+        className="flex items-center gap-2 px-4 h-10 rounded bg-[var(--background)] text-[var(--foreground)] shadow-lg border border-[var(--foreground)]/10 font-semibold whitespace-nowrap"
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
         aria-controls="map-selector-list"
@@ -52,18 +62,15 @@ const MapSelector: React.FC<MapSelectorProps> = ({
       {open && (
         <ul
           id="map-selector-list"
-          className="absolute left-0 mt-2 w-40 bg-[var(--background)] text-[var(--foreground)] shadow-lg rounded border border-[var(--foreground)]/10 z-50"
+          className="absolute left-0 mt-2 bg-[var(--background)] text-[var(--foreground)] shadow-lg rounded border border-[var(--foreground)]/10 z-50 min-w-full whitespace-nowrap"
         >
           {maps.map((map: MapMeta) => (
             <li key={map.id}>
               <button
-                className={`w-full text-left px-4 py-2 hover:bg-[var(--foreground)]/10 rounded ${
+                className={`w-full text-left px-4 py-2 hover:bg-[var(--foreground)]/10 rounded whitespace-nowrap ${
                   selectedMapId === map.id ? "font-bold" : ""
                 }`}
-                onClick={() => {
-                  onSelect(map.id);
-                  setOpen(false);
-                }}
+                onClick={() => handleSelect(map.id)}
               >
                 {map.label}
               </button>

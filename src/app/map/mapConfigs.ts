@@ -1,9 +1,12 @@
-import brightonGeoJSON from "./maps/brighton/data.json";
-import debrisGeoJSON from "./maps/debris/data.json";
+import type { FeatureCollection, Polygon } from "geojson";
+import brightonGeoJSONData from "./maps/brighton/data.json";
+import debrisGeoJSONData from "./maps/debris/data.json";
 import type { ComponentType } from "react";
-import type { FeatureCollection } from "geojson";
 import BrightonSidebar from "./maps/brighton/Sidebar";
 import DebrisSidebar from "./maps/debris/Sidebar";
+
+const brightonGeoJSON = brightonGeoJSONData as FeatureCollection<Polygon>;
+const debrisGeoJSON = debrisGeoJSONData as FeatureCollection<Polygon>;
 
 export interface MapMeta {
   id: string;
@@ -14,5 +17,5 @@ export interface MapMeta {
 
 export const MAPS: MapMeta[] = [
   { id: "brighton", label: "Brighton Map", data: brightonGeoJSON, Sidebar: BrightonSidebar },
-  { id: "debris", label: "Debris Map", data: debrisGeoJSON, Sidebar: DebrisSidebar },
+  { id: "debris", label: "Leaf and Yard Debris Map", data: debrisGeoJSON, Sidebar: DebrisSidebar },
 ]; 
