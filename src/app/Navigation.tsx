@@ -13,23 +13,21 @@ export default function Navigation() {
     <nav className="relative">
       {/* Hamburger/X Icon */}
       <button
-        className="fixed top-4 right-4 z-50 w-10 h-10 flex items-center justify-center"
+        className="fixed top-4 right-4 z-50 w-10 h-10 rounded-full flex items-center justify-center bg-[var(--background)] text-[var(--foreground)] shadow-lg border border-[var(--foreground)]/10"
         aria-label={open ? "Close menu" : "Open menu"}
         onClick={() => setOpen((prev) => !prev)}
       >
-        {/* Background Circle */}
-        <span className="absolute w-14 h-14 rounded-full bg-[var(--background)] shadow-lg -z-10" />
         {/* Hamburger/X Icon */}
         <span
-          className={`absolute w-8 h-0.5 bg-current transition-all duration-300 ease-in-out
+          className={`absolute w-5 h-0.5 bg-current transition-all duration-300 ease-in-out
             ${
               open
                 ? "rotate-45 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
-                : "top-2 left-1/2 -translate-x-1/2"
+                : "top-3 left-1/2 -translate-x-1/2"
             }`}
         />
         <span
-          className={`absolute w-8 h-0.5 bg-current transition-all duration-300 ease-in-out
+          className={`absolute w-5 h-0.5 bg-current transition-all duration-300 ease-in-out
             ${
               open
                 ? "opacity-0 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
@@ -37,11 +35,11 @@ export default function Navigation() {
             }`}
         />
         <span
-          className={`absolute w-8 h-0.5 bg-current transition-all duration-300 ease-in-out
+          className={`absolute w-5 h-0.5 bg-current transition-all duration-300 ease-in-out
             ${
               open
                 ? "-rotate-45 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
-                : "bottom-2 left-1/2 -translate-x-1/2"
+                : "bottom-3 left-1/2 -translate-x-1/2"
             }`}
         />
       </button>
