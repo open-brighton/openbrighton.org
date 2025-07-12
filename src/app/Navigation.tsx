@@ -13,7 +13,7 @@ export default function Navigation() {
     <nav className="relative">
       {/* Hamburger/X Icon */}
       <button
-        className="fixed top-4 right-4 z-50 w-10 h-10 rounded-full flex items-center justify-center bg-[var(--background)] text-[var(--foreground)] shadow-lg border border-[var(--foreground)]/10"
+        className="fixed top-4 right-4 z-70 w-10 h-10 rounded-full flex items-center justify-center bg-[var(--background)] text-[var(--foreground)] shadow-lg border border-[var(--foreground)]/10"
         aria-label={open ? "Close menu" : "Open menu"}
         onClick={() => setOpen((prev) => !prev)}
       >
@@ -46,7 +46,7 @@ export default function Navigation() {
 
       {/* Navigation Links */}
       <ul
-        className={`fixed top-0 right-0 h-full w-2/3 max-w-xs bg-[var(--background)] text-[var(--foreground)] flex flex-col gap-6 pt-20 px-6 shadow-lg z-40 transition-transform duration-300 ease-in-out ${
+        className={`fixed top-0 right-0 h-full w-2/3 max-w-xs bg-[var(--background)] text-[var(--foreground)] flex flex-col gap-6 pt-20 px-6 shadow-lg z-60 transition-transform duration-300 ease-in-out ${
           open ? "translate-x-0" : "translate-x-full"
         }`}
       >
@@ -59,39 +59,6 @@ export default function Navigation() {
             <MdHome className="inline-block text-lg" /> Home
           </Link>
         </li>
-        {FeatureFlags.contact && (
-          <li>
-            <Link
-              href="/contact"
-              className="hover:underline flex items-center gap-2"
-              onClick={() => setOpen(false)}
-            >
-              <MdMail className="inline-block text-lg" /> Contact
-            </Link>
-          </li>
-        )}
-        {FeatureFlags.ideas && (
-          <li>
-            <Link
-              href="/ideas"
-              className="hover:underline flex items-center gap-2"
-              onClick={() => setOpen(false)}
-            >
-              <MdLightbulb className="inline-block text-lg" /> Submit an Idea
-            </Link>
-          </li>
-        )}
-        {FeatureFlags.roadmap && (
-          <li>
-            <Link
-              href="/roadmap"
-              className="hover:underline flex items-center gap-2"
-              onClick={() => setOpen(false)}
-            >
-              <FaMap className="inline-block text-lg" /> Roadmap
-            </Link>
-          </li>
-        )}
         {FeatureFlags.map && (
           <li>
             <Link
@@ -99,18 +66,7 @@ export default function Navigation() {
               className="hover:underline flex items-center gap-2"
               onClick={() => setOpen(false)}
             >
-              <FaMap className="inline-block text-lg" /> Map
-            </Link>
-          </li>
-        )}
-        {FeatureFlags.chat && (
-          <li>
-            <Link
-              href="/chat"
-              className="hover:underline flex items-center gap-2"
-              onClick={() => setOpen(false)}
-            >
-              <FaComments className="inline-block text-lg" /> Chat
+              <FaMap className="inline-block text-lg" /> Maps
             </Link>
           </li>
         )}
@@ -128,7 +84,7 @@ export default function Navigation() {
       {/* Overlay for menu */}
       {open && (
         <div
-          className="fixed inset-0 bg-black/40 z-30"
+          className="fixed inset-0 bg-black/40 z-50"
           onClick={() => setOpen(false)}
           aria-hidden="true"
         />
