@@ -6,6 +6,7 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import { useEffect, useRef, useState } from "react";
 import { MAPBOX_ACCESS_TOKEN } from "../config";
 import brightonGeoJSON from "./brighton.json" assert { type: "json" };
+import debris from "./debris.json";
 // https://maps.monroecounty.gov/server/rest/services/Base_Map/Monroe_Basemap_911/MapServer/148/query?where=NAME=%27Brighton%27&outFields=*&returnGeometry=true&f=geojson
 import type { FeatureCollection } from "geojson";
 
@@ -34,9 +35,13 @@ export default function MapPage() {
         });
         // Add GeoJSON source and layer for Brighton
         if (mapRef.current && brightonGeoJSON) {
+          // mapRef.current.addSource("brighton", {
+          //   type: "geojson",
+          //   data: brightonGeoJSON as FeatureCollection,
+          // });
           mapRef.current.addSource("brighton", {
             type: "geojson",
-            data: brightonGeoJSON as FeatureCollection,
+            data: debris as FeatureCollection,
           });
           mapRef.current.addLayer({
             id: "brighton-fill",
