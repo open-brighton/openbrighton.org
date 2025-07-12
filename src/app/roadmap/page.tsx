@@ -1,14 +1,11 @@
 "use client";
 
 import FeatureFlags from "../FeatureFlags";
+import { notFound } from "next/navigation";
 
 export default function RoadmapPage() {
   if (!FeatureFlags.roadmap) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-xl font-bold">Roadmap is currently disabled.</div>
-      </div>
-    );
+    notFound();
   }
   return (
     <div className="min-h-screen flex items-center justify-center">

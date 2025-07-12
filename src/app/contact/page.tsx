@@ -5,6 +5,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import FeatureFlags from "../FeatureFlags";
 import { gql, useMutation } from "@apollo/client";
+import { notFound } from "next/navigation";
 
 export default function ContactPage() {
   const schema = z.object({
@@ -51,11 +52,7 @@ export default function ContactPage() {
       .catch(() => {});
   }
   if (!FeatureFlags.contact) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-xl font-bold">Contact is currently disabled.</div>
-      </div>
-    );
+    notFound();
   }
   return (
     <div className="min-h-screen flex items-center justify-center">

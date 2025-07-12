@@ -1,13 +1,14 @@
 import brightonGeoJSON from "./maps/brighton/data.json";
 import debrisGeoJSON from "./maps/debris/data.json";
 import type { ComponentType } from "react";
+import type { FeatureCollection } from "geojson";
 import BrightonSidebar from "./maps/brighton/Sidebar";
 import DebrisSidebar from "./maps/debris/Sidebar";
 
 export interface MapMeta {
   id: string;
   label: string;
-  data: any;
+  data: FeatureCollection;
   Sidebar?: ComponentType;
 }
 

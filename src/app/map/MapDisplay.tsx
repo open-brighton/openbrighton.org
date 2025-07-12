@@ -1,9 +1,10 @@
 import React, { useEffect, useRef } from "react";
 import mapboxgl from "mapbox-gl";
 import { MAPBOX_ACCESS_TOKEN } from "../config";
-
+import type { FeatureCollection } from "geojson";
+import "mapbox-gl/dist/mapbox-gl.css";
 interface MapDisplayProps {
-  mapData: any; // GeoJSON FeatureCollection
+  mapData: FeatureCollection; // GeoJSON FeatureCollection
 }
 
 const INITIAL_CENTER: [number, number] = [-77.5734, 43.1223];

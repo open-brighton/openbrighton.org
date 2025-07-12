@@ -1,13 +1,10 @@
 import FeatureFlags from "../FeatureFlags";
 import config from "../config";
+import { notFound } from "next/navigation";
 
 export default function DevPage() {
   if (!FeatureFlags.dev) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-xl font-bold">Dev route is disabled.</div>
-      </div>
-    );
+    notFound();
   }
 
   return (

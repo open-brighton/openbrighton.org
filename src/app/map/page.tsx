@@ -1,31 +1,19 @@
 "use client";
 import FeatureFlags from "../FeatureFlags";
-import mapboxgl from "mapbox-gl";
 
-import "mapbox-gl/dist/mapbox-gl.css";
-import { useEffect, useRef, useState } from "react";
-import { MAPBOX_ACCESS_TOKEN } from "../config";
-import brightonGeoJSON from "./brighton.json" assert { type: "json" };
+import { useState } from "react";
 import { MAPS } from "./mapConfigs";
 import MapSelector from "./MapSelector";
 import MapDisplay from "./MapDisplay";
-// https://maps.monroecounty.gov/server/rest/services/Base_Map/Monroe_Basemap_911/MapServer/148/query?where=NAME=%27Brighton%27&outFields=*&returnGeometry=true&f=geojson
-import type { FeatureCollection } from "geojson";
 import type { MapMeta } from "./mapConfigs";
-
-const INITIAL_CENTER: [number, number] = [-77.5734, 43.1223];
-const INITIAL_ZOOM = 13;
+import { notFound } from "next/navigation";
 
 export default function MapPage() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [selectedMapId, setSelectedMapId] = useState<string>(MAPS[0].id);
 
   if (!FeatureFlags.map) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-xl font-bold">Map is currently disabled.</div>
-      </div>
-    );
+    notFound();
   }
 
   const selectedMap: MapMeta | undefined = MAPS.find(

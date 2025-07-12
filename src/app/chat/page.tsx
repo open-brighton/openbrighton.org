@@ -4,6 +4,7 @@ import { useRef, useEffect, useState, useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { FaArrowRight } from "react-icons/fa";
 import FeatureFlags from "../FeatureFlags";
+import { notFound } from "next/navigation";
 
 export default function ChatPage() {
   const [messages, setMessages] = useState([
@@ -68,11 +69,7 @@ export default function ChatPage() {
   );
 
   if (!FeatureFlags.chat) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-xl font-bold">Chat is currently disabled.</div>
-      </div>
-    );
+    notFound();
   }
 
   return (
