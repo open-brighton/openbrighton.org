@@ -6,6 +6,7 @@ import MapSelector from "./MapSelector";
 import MapDisplay from "./MapDisplay";
 import type { MapMeta } from "./mapConfigs";
 import { notFound, useParams } from "next/navigation";
+import { useSwipeable } from "react-swipeable";
 
 interface MapPageContentProps {
   initialMapId: string;
@@ -26,26 +27,85 @@ export default function MapPageContent({ initialMapId }: MapPageContentProps) {
   );
   const SidebarComponent = selectedMap?.Sidebar;
 
+  const swipeHandlers = useSwipeable({
+    onSwipedDown: () => {
+      setSidebarOpen(false);
+    },
+    delta: 50, // minimum distance(px) before a swipe is detected
+    trackTouch: true,
+    trackMouse: true,
+    preventScrollOnSwipe: true,
+  });
+
   return (
     <div className="relative w-full h-screen flex">
-      {/* Sidebar (toggleable, slides in/out, only on md+) */}
-      <aside
-        className={`hidden md:flex flex-col fixed top-0 left-0 h-full bg-[var(--background)] text-[var(--foreground)] shadow-lg z-30 p-6 border-r border-[var(--foreground)]/10 transition-transform duration-300 ease-in-out w-80 max-w-full
-        ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}`}
+      {/* Sidebar: Desktop (left), Mobile (bottom tray) */}
+      {SidebarComponent && (
+        <>
+          {/* Desktop/Tablet Sidebar */}
+          <aside
+            className={`hidden md:flex flex-col fixed top-0 left-0 h-full bg-[var(--background)] text-[var(--foreground)] shadow-lg z-30 p-6 border-r border-[var(--foreground)]/10 transition-transform duration-300 ease-in-out w-80 max-w-full
+            ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}`}
+            style={{ willChange: "transform" }}
+          >
+            <SidebarComponent />
+          </aside>
+          {/* Mobile Sidebar Tray */}
+          <aside
+            {...swipeHandlers}
+            className={`md:hidden fixed left-0 bottom-0 w-full bg-[var(--background)] text-[var(--foreground)] shadow-2xl z-40 p-6 border-t border-[var(--foreground)]/10 transition-transform duration-300 ease-in-out
+            ${sidebarOpen ? "translate-y-0" : "translate-y-full"}`}
+            style={{
+              willChange: "transform",
+              minHeight: "40vh",
+              maxHeight: "80vh",
+              borderTopLeftRadius: "1rem",
+              borderTopRightRadius: "1rem",
+            }}
+          >
+            <div className="flex justify-between items-center mb-4">
+              <span className="font-bold text-lg">Info</span>
+              <button
+                className="text-2xl px-2 py-1 rounded hover:bg-[var(--foreground)]/10"
+                onClick={() => setSidebarOpen(false)}
+                aria-label="Close info tray"
+                type="button"
+              >
+                &times;
+              </button>
+            </div>
+            <SidebarComponent />
+          </aside>
+        </>
+      )}
+      {/* Mobile: Floating open tray button */}
+      {/* <button
+        className="md:hidden fixed bottom-4 left-4 z-50 flex items-center px-4 py-2 rounded-full bg-[var(--background)] text-[var(--foreground)] shadow-lg border border-[var(--foreground)]/10 font-semibold"
         style={{ willChange: "transform" }}
+        onClick={() => setSidebarOpen(true)}
+        aria-label="Show info tray"
+        type="button"
+        hidden={sidebarOpen}
       >
-        {SidebarComponent ? (
-          <SidebarComponent />
-        ) : (
-          <div className="text-base opacity-80">
-            No extra info for this map.
-          </div>
-        )}
-      </aside>
-      {/* Floating toggle button and map selector */}
-      <div className="hidden md:flex fixed top-6 left-4 z-40 flex-row items-start gap-2">
+        <svg
+          className="w-5 h-5 mr-2"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M13 16h-1v-4h-1m1-4h.01"
+          />
+        </svg>
+        Info
+      </button> */}
+      {/* Floating toggle button and map selector (desktop/tablet) */}
+      <div className="flex fixed top-4 left-4 z-40 flex-row items-start gap-2">
         <button
-          className={`flex items-center justify-center w-10 h-10 rounded-full bg-[var(--background)] text-[var(--foreground)] shadow-lg border border-[var(--foreground)]/10 transition-transform duration-300 ease-in-out
+          className={`hidden md:flex items-center justify-center w-10 h-10 rounded-full bg-[var(--background)] text-[var(--foreground)] shadow-lg border border-[var(--foreground)]/10 transition-transform duration-300 ease-in-out
           ${sidebarOpen ? "translate-x-80" : "translate-x-0"}`}
           style={{ willChange: "transform" }}
           onClick={() => setSidebarOpen((open) => !open)}
@@ -78,7 +138,7 @@ export default function MapPageContent({ initialMapId }: MapPageContentProps) {
         />
       </div>
       {/* Map container (full width, but sidebar overlays on md+) */}
-      <MapDisplay mapData={selectedMap?.data} />
+      {selectedMap && <MapDisplay mapData={selectedMap?.data} />}
     </div>
   );
 }

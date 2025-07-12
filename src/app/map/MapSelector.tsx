@@ -33,7 +33,7 @@ const MapSelector: React.FC<MapSelectorProps> = ({
   return (
     <div
       className={`relative transition-transform duration-300 ${
-        sidebarOpen ? "translate-x-80" : "translate-x-0"
+        sidebarOpen ? "md:translate-x-80" : "md:translate-x-0"
       }`}
       style={{ willChange: "transform" }}
     >
