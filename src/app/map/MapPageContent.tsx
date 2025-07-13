@@ -70,7 +70,7 @@ export default function MapPageContent({ initialMapId }: MapPageContentProps) {
             ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}`}
             style={{ willChange: "transform" }}
           >
-            <SidebarComponent selectedZone={selectedZone} />
+            <SidebarComponent selectedZone={selectedZone ?? undefined} />
           </aside>
           {/* Mobile Sidebar Tray */}
           <aside
@@ -96,7 +96,7 @@ export default function MapPageContent({ initialMapId }: MapPageContentProps) {
                 &times;
               </button>
             </div>
-            <SidebarComponent selectedZone={selectedZone} />
+            <SidebarComponent selectedZone={selectedZone ?? undefined} />
           </aside>
         </>
       )}
