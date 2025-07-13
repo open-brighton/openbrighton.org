@@ -1,6 +1,9 @@
 import React from "react";
+import type { Feature } from "geojson";
 
-const DebrisSidebar: React.FC = () => (
+const DebrisSidebar: React.FC<{ selectedZone?: Feature }> = ({
+  selectedZone,
+}) => (
   <div>
     <h2 className="text-lg font-semibold mb-2">
       Leaf and Yard Debris Collection
@@ -18,19 +21,29 @@ const DebrisSidebar: React.FC = () => (
           here
         </a>
       </li>
-      {/* <li>Click on a zone for more info</li> */}
     </ul>
-    {/* <div className="mt-6">
-      <h3 className="text-md font-semibold mb-2">Upcoming Areas</h3>
-      <div className="flex flex-col gap-2">
-        <div>
-          <span className="font-medium">Next:</span> <span>areas 2-4</span>
-        </div>
-        <div>
-          <span className="font-medium">On Deck:</span> <span>areas 2-4</span>
+    {selectedZone && (
+      <div className="mt-6 p-4 rounded bg-[var(--background)] text-[var(--foreground)] border border-[var(--foreground)]/10 shadow">
+        <h3 className="text-md font-semibold mb-2">Selected Zone</h3>
+        <div className="flex flex-col gap-2">
+          <div>
+            <span className="font-medium">Zone ID:</span>{" "}
+            {selectedZone.properties?.OBJECTID}
+          </div>
+          <div>
+            <span className="font-medium">Subarea:</span>{" "}
+            {selectedZone.properties?.SUBAREA}
+          </div>
+          <div>
+            <span className="font-medium">Area:</span>{" "}
+            {selectedZone.properties?.Area}
+          </div>
+          <div className="italic text-sm opacity-70">
+            (Placeholder for more details)
+          </div>
         </div>
       </div>
-    </div> */}
+    )}
   </div>
 );
 

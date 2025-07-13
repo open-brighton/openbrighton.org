@@ -7,6 +7,8 @@ import MapDisplay from "./MapDisplay";
 import type { MapMeta } from "./mapConfigs";
 import { notFound, useParams } from "next/navigation";
 import { useSwipeable } from "react-swipeable";
+import React from "react";
+import type { Feature } from "geojson";
 
 interface MapPageContentProps {
   initialMapId: string;
@@ -18,6 +20,7 @@ export default function MapPageContent({ initialMapId }: MapPageContentProps) {
   const mapId = params?.mapId as string | undefined;
   const selectedMapId = mapId || initialMapId;
   const [chevronAnimate, setChevronAnimate] = useState(true);
+  const [selectedZone, setSelectedZone] = useState<Feature | null>(null);
 
   useEffect(() => {
     if (!sidebarOpen) {
@@ -34,7 +37,9 @@ export default function MapPageContent({ initialMapId }: MapPageContentProps) {
   const selectedMap: MapMeta | undefined = MAPS.find(
     (m: MapMeta) => m.id === selectedMapId
   );
-  const SidebarComponent = selectedMap?.Sidebar;
+  const SidebarComponent = selectedMap?.Sidebar as
+    | React.ComponentType<{ selectedZone?: Feature }>
+    | undefined;
 
   const swipeHandlers = useSwipeable({
     onSwipedDown: () => {
@@ -45,6 +50,14 @@ export default function MapPageContent({ initialMapId }: MapPageContentProps) {
     trackMouse: true,
     preventScrollOnSwipe: true,
   });
+
+  // Handler for zone selection
+  const handleZoneSelect = (feature: Feature) => {
+    setSelectedZone(feature);
+  };
+
+  // Get selectedZoneId for highlighting
+  const selectedZoneId = selectedZone?.properties?.OBJECTID;
 
   return (
     <div className="relative w-full h-screen flex">
@@ -57,7 +70,7 @@ export default function MapPageContent({ initialMapId }: MapPageContentProps) {
             ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}`}
             style={{ willChange: "transform" }}
           >
-            <SidebarComponent />
+            <SidebarComponent selectedZone={selectedZone} />
           </aside>
           {/* Mobile Sidebar Tray */}
           <aside
@@ -83,7 +96,7 @@ export default function MapPageContent({ initialMapId }: MapPageContentProps) {
                 &times;
               </button>
             </div>
-            <SidebarComponent />
+            <SidebarComponent selectedZone={selectedZone} />
           </aside>
         </>
       )}
@@ -148,7 +161,13 @@ export default function MapPageContent({ initialMapId }: MapPageContentProps) {
         />
       </div>
       {/* Map container (full width, but sidebar overlays on md+) */}
-      {selectedMap && <MapDisplay mapData={selectedMap?.data} />}
+      {selectedMap && (
+        <MapDisplay
+          mapData={selectedMap?.data}
+          selectedZoneId={selectedZoneId}
+          onZoneSelect={handleZoneSelect}
+        />
+      )}
     </div>
   );
 }
