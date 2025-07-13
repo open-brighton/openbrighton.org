@@ -1,15 +1,31 @@
+"use client";
+
 import Contact from "./contact/Contact";
+import Player from "lottie-react";
+import logoLottieAnimation from "../../public/logo-lottie/animations/animation.json";
+import { Montserrat } from "next/font/google";
+const montserrat = Montserrat();
 
 export default function Home() {
   return (
     <>
       <section className="min-h-screen flex flex-col items-center justify-center">
-        <img
-          src="/logo.webp"
-          alt="Open Brighton Logo"
-          width={320}
-          height={320}
-        />
+        <div className="flex flex-col items-center gap-2">
+          <div style={{ width: 320, height: 320 }}>
+            <Player
+              animationData={logoLottieAnimation}
+              autoplay
+              loop
+              style={{ width: "100%", height: "100%" }}
+              aria-label="Open Brighton Lottie Animation"
+            />
+          </div>
+          <h1
+            className={`text-[2.8rem] font-extrabold text-[#F1DFB5] tracking-tight drop-shadow-md ${montserrat.className}`}
+          >
+            Open Brighton
+          </h1>
+        </div>
       </section>
       <section className="py-12 flex flex-col items-center justify-center gap-y-8 bg-[var(--background)] text-[var(--foreground)]">
         <h2 className="text-3xl font-bold text-center">Mission</h2>
