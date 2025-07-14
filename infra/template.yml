@@ -106,8 +106,10 @@ Resources:
           AcmCertificateArn: !Ref SslCert
           SslSupportMethod: sni-only
         CustomErrorResponses:
-          - ErrorCachingMinTTL: 300
-            ErrorCode: 404
+          - ErrorCode: 404
+            ResponseCode: 404
+            ResponsePagePath: /404.html
+          - ErrorCode: 403
             ResponseCode: 404
             ResponsePagePath: /404.html
 
