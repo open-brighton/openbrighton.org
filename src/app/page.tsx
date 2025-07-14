@@ -4,7 +4,7 @@ import Contact from "./contact/Contact";
 import Player from "lottie-react";
 import logoLottieAnimation from "../../public/logo-lottie/animations/animation.json";
 import { Montserrat } from "next/font/google";
-const montserrat = Montserrat();
+const montserrat = Montserrat({ subsets: ["latin"] });
 
 export default function Home() {
   return (
